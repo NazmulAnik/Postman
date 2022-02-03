@@ -6,6 +6,55 @@
 	},
 	"item": [
 		{
+			"name": "Negative Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error.message).to.eql(\"Username or password incorrect\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n \"username\":\"salman\", \r\n \"password\":\"salman1238\" \r\n} \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://customer-test-api.herokuapp.com/customer/api/v1/login",
+					"protocol": "https",
+					"host": [
+						"customer-test-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"customer",
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Login",
 			"request": {
 				"method": "POST",
@@ -44,6 +93,9 @@
 							"pm.test(\"Fetch customer list\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData.Customers[0].id).to.eql(101);\r",
+							"});\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -76,6 +128,50 @@
 		},
 		{
 			"name": "Search",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Search customer List\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.id).to.eql(954845);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://customer-test-api.herokuapp.com/customer/api/v1/get/954845",
+					"protocol": "https",
+					"host": [
+						"customer-test-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"customer",
+						"api",
+						"v1",
+						"get",
+						"954845"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Non Exist Search",
 			"event": [
 				{
 					"listen": "test",
@@ -275,6 +371,70 @@
 		},
 		{
 			"name": "Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"statuse\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql(\"Success\");\r",
+							"});\r",
+							"pm.test(\"Check Update\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.Customers.address).to.eql(\"Mirpur,Dhaka\");\r",
+							"});\r",
+							"pm.test(\"Update\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.Customers.address).includes(\"Mirpur\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n            \"id\": 101,\r\n            \"name\": \"Mr. Kamal\",\r\n            \"email\": \"mrkamal@test.com\",\r\n            \"address\": \"Mirpur,Dhaka\",\r\n            \"phone_number\": \"01502020110\"\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://customer-test-api.herokuapp.com/customer/api/v1/update/101",
+					"protocol": "https",
+					"host": [
+						"customer-test-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"customer",
+						"api",
+						"v1",
+						"update",
+						"101"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Non Exist Update",
 			"event": [
 				{
 					"listen": "test",
